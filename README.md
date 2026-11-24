@@ -309,7 +309,7 @@ Movers' line uses their reduced limit.
 
 ## 5. Results: copy
 
-Every result shows: the letter and name, the headline figure (C, D, E), the explanation, "Read More" links, **Your Next Step** with the line "You’ll have peace of mind, knowing that your taxes were done right." and the Get Started button, the not-ready block with both booking buttons, the optional email ask (C, D, E only), and small print. Under the result: Back, Start Over, and the answer trail (chips under "Your Answers"; clicking a chip reopens that question).
+Every result shows: the letter and name, the headline figure (C, D, E), the explanation, "Read More" links, **Your Next Step** with the Get Started button, the not-ready block with both booking buttons, the optional email ask (C, D, E only), and small print. Under the result: Back, Start Over, and the answer trail (chips under "Your Answers"; clicking a chip reopens that question).
 
 Not-ready block (all results), label "Not Ready Yet?":
 > Book a paid consultation with a CPA or Enrolled Agent, or a free support call with the Greenback team. [Book a Consultation] [Book a Support Call]

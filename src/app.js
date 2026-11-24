@@ -91,7 +91,6 @@
       el('div', { class: 'next-step' },
         el('div', { class: 'next-label' }, 'Your Next Step'),
         el('p', {}, r.nextStep),
-        el('p', { class: 'reassure' }, 'You’ll have peace of mind, knowing that your taxes were done right.'),
         el('button', { type: 'button', class: 'btn btn-primary', onclick: openGetStarted }, 'Get Started')),
       el('div', { class: 'not-ready' },
         el('div', { class: 'next-label' }, 'Not Ready Yet?'),
