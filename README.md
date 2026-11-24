@@ -72,6 +72,15 @@ The **automatic check** after Q9 is not a question; the reader never sees it. It
 
 Copy exactly. Curly apostrophes are intentional.
 
+**Links point at Greenback pages only.** No IRS links anywhere in the page copy, including the
+sources line under the figures table. The IRS URLs in `src/figures.js` and in section 8 below are
+code comments recording where each figure came from, so they can be re-checked each November; they
+are not page copy and should stay.
+
+**The FEIE guide is deliberately linked twice** (the head-term anchor in the intro, and the citation
+under the figures table). That is a decision, not an oversight: a reader at the table shouldn't have
+to scroll back to the hero for the source. Keep both.
+
 ### Q1: What Is Your U.S. Tax Status?
 
 **Answers:**
