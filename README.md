@@ -6,7 +6,7 @@
 
 This repo has two things:
 
-1. **A working prototype** (`index.html` + `src/`). Open `index.html` in a browser and click through every path. The questions, branching, math and result copy are final. The visual styling is a placeholder; use the Greenback site styles.
+1. **A working prototype** (`index.html` + `src/`). Open `index.html` in a browser and click through every path. The questions, branching, math and result copy are final. The styling follows the new service pages and Ariele's Support Call and Consultations designs: the calculator sits in the hero where the form card sits on those pages. Swap the prototype CSS for the site's own classes (`btn-primary`, `btn-orange`, the services-hub hero and stats blocks).
 2. **This README**: everything the calculator has to do, written as text you can copy.
 
 **You choose the build route.** Gravity Forms (which can handle conditional logic), a custom block, or reusing this JavaScript are all fine, as long as the requirements below are met. If something here is hard to build the way it's written, tell us and we'll adjust.
@@ -21,9 +21,9 @@ This repo has two things:
 | 2 | **The result shows on the page with no email gate.** | Google lists open calculators in AI Overviews. Gated tools don't get listed. |
 | 3 | **Every question shows its helper text and link** (Section 3). | Readers know what each question means before they answer. |
 | 4 | **No dead ends.** Readers the FEIE doesn't fit get the result and links in Section 5, never a bare "not eligible". | Every reader leaves with a next step. |
-| 5 | **Every result has three actions:** **Get Started** (opens Greenback's existing Get Started pop-up form), **Book a Consultation** (`/services/expat-tax-consultation/`) and **Book a Free Support Call** (`/services/support-call/`). | Get Started is the main conversion; the other two are for readers who aren't ready. |
+| 5 | **Every result has three actions:** **Get Started** (opens Greenback's existing Get Started pop-up form), **Book a consultation** (`/services/expat-tax-consultation/`, paid, with a CPA or Enrolled Agent) and **Book a support call** (`/services/support-call/`, free, with the Greenback team). | Get Started is the main conversion; the other two are for readers who aren't ready. |
 | 6 | **Optional email ask on results C, D and E**: "Email me the spreadsheet" sends the **expanded FEIE spreadsheet** (the existing Excel calculator) to the email entered. It sits under the result, never before it. | The Excel sheet becomes a value-add for readers who want more detail. Marketing (Elizabeth) can confirm where the email goes. |
-| 7 | **H1, quick answer and "How this estimate works" are plain HTML text** on the page, crawlable without running JavaScript. The H1 names it as an FEIE calculator. | So Google can read and quote the page. The prototype shows the placement. |
+| 7 | **H1, quick answer and "How this estimate works" are plain HTML text** on the page, crawlable without running JavaScript. The H1 is the small eyebrow label "FEIE Calculator for U.S. Expats", as on the new service pages, with the large display line under it. | So Google can read and quote the page. The prototype shows the placement. |
 | 8 | **All IRS figures live in one table** (`src/figures.js` in the prototype), keyed by tax year, not repeated inside form rules. | One place to update each November (Section 7). |
 | 9 | **Answers are not stored or sent anywhere.** The calculator runs in the browser. Only the optional email ask submits anything. | Income answers are personal. |
 | 10 | Works on mobile, keyboard-accessible, and the result is announced to screen readers (`aria-live`). | |
@@ -90,7 +90,7 @@ Copy exactly. Curly apostrophes are intentional.
 
 **Helper text:** The FEIE only covers income from work you do while living outside the U.S. If you live in the U.S. and work remotely for a company abroad, it doesn’t apply.
 
-**Goes to:** One country, moved this year, or a few countries → Q4 (movers also get the move-month and U.S.-pay follow-ups after Q6). No home base → **Result B** (reason: nomad). Still in the U.S. → **Result A** (reason: us).
+**Goes to:** One country, moved this year, or a few countries → Q4 (movers also get the move-month and U.S.-pay follow-ups after Q7). No home base → **Result B** (reason: nomad). Still in the U.S. → **Result A** (reason: us).
 
 ### Q4: In any 12 months in a row, how many full days were you outside the U.S.?
 
@@ -146,7 +146,7 @@ Copy exactly. Curly apostrophes are intentional.
 
 **Link under the helper:** [Filing with a foreign spouse](https://www.greenbacktaxservices.com/knowledge-center/filing-joint-taxes-foreign-spouse/)
 
-**Goes to:** Married filing jointly → follow-up "Does your spouse also earn income abroad?" Everyone else → Q7 (movers: move month first).
+**Goes to:** Married filing jointly → follow-up "Does your spouse also earn income abroad?" Everyone else → Q7.
 
 ### Q6 follow-up: Does your spouse also earn income abroad?
 *Shown only when: Q6 is married filing jointly.*
@@ -157,7 +157,19 @@ Copy exactly. Curly apostrophes are intentional.
 
 **Helper text:** Each spouse who works abroad can exclude their own income, up to the yearly limit each ($132,900 for 2026, $130,000 for 2025).
 
-**Goes to:** Either answer → Q7 (movers: move month first). "Yes" doubles the exclusion and the no-tax line.
+**Goes to:** Either answer → Q7. "Yes" doubles the exclusion and the no-tax line.
+
+### Q7: About how much do you earn in a year?
+*Title for movers: About how much will you earn abroad this year?*
+
+**Answers:**
+Under $50,000 · $50,000 to $75,000 · $75,000 to $100,000 · $100,000 to $125,000 · $125,000 to $150,000 · $150,000 to $175,000 · $175,000 to $200,000 · $200,000 to $250,000 · $250,000 to $300,000 · Over $300,000
+
+**Helper text:** If you selected single, head of household or married filing separately, enter your own income. If you’re married filing jointly, enter both incomes together. Count pay and self-employment income before tax, in U.S. dollars.
+
+**Helper text for movers:** Enter what you earn abroad this year. If you’re married filing jointly, include both incomes. Before tax, in U.S. dollars.
+
+**Goes to:** Movers → move month follow-up. Everyone else → Q8.
 
 ### Q7 follow-up: Which month did you move abroad?
 *Shown only when: Q3 is "I moved abroad this year".*
@@ -165,7 +177,7 @@ Copy exactly. Curly apostrophes are intentional.
 **Answers:**
 January · February · March · April · May · June · July · August · September · October · November · December
 
-**Helper text:** The FEIE limit is cut to the share of the year you lived abroad, so the month you moved changes the estimate.
+**Helper text:** Your FEIE limit is cut to the part of the year you lived abroad, so the month you moved changes the estimate.
 
 **Link under the helper:** [Moving Abroad](https://www.greenbacktaxservices.com/who-we-help/moving-abroad/)
 
@@ -179,18 +191,7 @@ None · Under $50,000 · $50,000 to $75,000 · $75,000 to $100,000 · $100,000 t
 
 **Helper text:** Pay for work done in the U.S. is fully taxed. Count it before tax.
 
-**Goes to:** Movers only. → Q7.
-
-### Q7: About how much do you earn in a year?
-
-**Answers:**
-Under $50,000 · $50,000 to $75,000 · $75,000 to $100,000 · $100,000 to $125,000 · $125,000 to $150,000 · $150,000 to $175,000 · $175,000 to $200,000 · $200,000 to $250,000 · $250,000 to $300,000 · Over $300,000
-
-**Helper text:** If you selected single, head of household or married filing separately, enter your own income. If you’re married filing jointly, enter both incomes together. Count pay and self-employment income before tax, in U.S. dollars.
-
-**Helper text for movers:** Enter what you earn abroad this year. If you’re married filing jointly, include both incomes. Before tax, in U.S. dollars.
-
-**Goes to:** Every answer → Q8.
+**Goes to:** Movers only. → Q8.
 
 ### Q8: Do you have any other income?
 
@@ -252,7 +253,7 @@ All amounts come from `src/figures.js`, using the tax year picked in Q2.
 `tax = bracketTax(taxable income + excluded amount) − bracketTax(excluded amount)`
 using the ordinary bracket table for the filing status. Income above the exclusion is taxed at the rate it would face if nothing were excluded. (This is the Foreign Earned Income Tax Worksheet in the Form 1040 instructions.)
 
-**Step 5. Child tax credit.** Subtract up to $2,200 per child, but never below $0. Only the nonrefundable part applies, because anyone claiming the FEIE can't get the refundable part.
+**Step 5. Child tax credit.** Subtract up to $2,200 per child, but never below $0. Only the nonrefundable part applies, because anyone claiming the FEIE can't get the refundable part (up to $1,700 per child for 2025 and 2026).
 
 **Step 6. With the Foreign Tax Credit (result E only, when Q10 was answered).**
 `tax after credit = max(0, tax from Step 5 − foreign tax rate × (foreign income − excluded amount))`
@@ -280,56 +281,64 @@ Movers' line uses their reduced limit.
 
 ## 5. Results: copy
 
-Every result shows: the letter and name, the figures (C, D, E), the explanation, "Read more" links, **Next step** with the Get Started button, the not-ready line with both booking buttons, the optional email ask (C, D, E only), and this small print:
+Every result shows: the letter and name, the figures (C, D, E), the explanation, "Read more" links, **Next step** with the Get Started button, the not-ready block with both booking buttons, the optional email ask (C, D, E only), and small print.
 
-> Estimate only, based on [YEAR] IRS figures and your answers. It isn’t tax advice. U.S. citizens and green card holders file a U.S. return every year, even when they owe $0.
+Not-ready block (all results), label "Not ready yet?":
+> Book a paid consultation with a CPA or Enrolled Agent, or a free support call with the Greenback team. [Book a consultation] [Book a support call]
 
-Not-ready line (all results):
-> Not ready yet? Book a consultation with an accountant, or a free support call for questions about Greenback.
-
-Optional email ask (C, D, E):
+Optional email ask (C, D, E), label "Optional":
 > Want the expanded FEIE spreadsheet to work through your numbers in more detail? We’ll email it to you. [Email me the spreadsheet]
 
-### Result A: May Not Apply Yet
-Next step: "Get Started, so a Greenback accountant can plan your first return abroad."
+Small print:
+- C, D, E: "Estimate only, based on [YEAR] IRS figures and your answers. It isn’t tax advice. U.S. citizens and green card holders file a U.S. return every year, even when they owe $0."
+- A, B: "This isn’t tax advice. U.S. citizens and green card holders file a U.S. return every year, even when they owe $0."
 
-| Reason | Explanation | Read more links |
-|---|---|---|
-| Not a citizen or green card holder (Q1) | The FEIE is for U.S. citizens and green card holders. If you live in the U.S. on a visa, or abroad as a non-U.S. citizen, different rules decide what you file. | [Tax Help for Visa and Green Card Holders](https://www.greenbacktaxservices.com/who-we-help/foreign-nationals/), [U.S. Taxes for Foreigners](https://www.greenbacktaxservices.com/knowledge-center/us-taxes-for-foreigners/) |
-| Still in the U.S. (Q3) | The FEIE only covers income from work you do while living outside the U.S., even when your employer is abroad. If you have accounts or property abroad, you may still have reporting to do. | [FBAR guide](https://www.greenbacktaxservices.com/knowledge-center/fbar/), [Tax Help for Americans with Property Abroad](https://www.greenbacktaxservices.com/who-we-help/foreign-property-owners/) |
-| Not enough time abroad (Q4) | The FEIE can apply once you reach 330 full days abroad in 12 months, or a full calendar year living in one country. Form 2350 gives you extra time to file while you get there. | [Form 2350](https://www.greenbacktaxservices.com/knowledge-center/form-2350/), [Physical Presence Test](https://www.greenbacktaxservices.com/knowledge-center/physical-presence-test/) |
-| U.S. government pay (Q5) | Pay from the U.S. government, including the military, can’t be excluded with the FEIE, even when you live abroad. | [FEIE guide](https://www.greenbacktaxservices.com/knowledge-center/tips-updates-foreign-earned-income-exclusion/) |
+### Result A: May Not Apply Yet
+
+| Reason | Explanation | Read more links | Next step |
+|---|---|---|---|
+| Not a citizen or green card holder (Q1) | The FEIE is for U.S. citizens and green card holders. If you live in the U.S. on a visa, or abroad as a non-U.S. citizen, different rules decide what you file. | [Tax Help for Visa and Green Card Holders](https://www.greenbacktaxservices.com/who-we-help/foreign-nationals/), [U.S. Taxes for Foreigners](https://www.greenbacktaxservices.com/knowledge-center/us-taxes-for-foreigners/) | Get Started, so a Greenback accountant can tell you what you need to file. |
+| Still in the U.S. (Q3) | The FEIE only covers income from work you do while living outside the U.S., even when your employer is abroad. If you have accounts or property abroad, you may still have reporting to do. | [FBAR guide](https://www.greenbacktaxservices.com/knowledge-center/fbar/), [Tax Help for Americans with Property Abroad](https://www.greenbacktaxservices.com/who-we-help/foreign-property-owners/) | Get Started, so a Greenback accountant can check what you need to report. |
+| Not enough time abroad (Q4) | The FEIE can apply once you reach 330 full days abroad in 12 months, or a full calendar year living in one country. Form 2350 gives you extra time to file while you get there. | [Form 2350](https://www.greenbacktaxservices.com/knowledge-center/form-2350/), [Physical Presence Test](https://www.greenbacktaxservices.com/knowledge-center/physical-presence-test/) | Get Started, so a Greenback accountant can plan your first return abroad. |
+| U.S. government pay (Q5) | Pay from the U.S. government, including the military, can’t be excluded with the FEIE, even when you live abroad. | [FEIE guide](https://www.greenbacktaxservices.com/knowledge-center/tips-updates-foreign-earned-income-exclusion/) | Get Started, so a Greenback accountant can look at what else you can claim. |
 
 ### Result B: Get Started for a Personal Review
-No number. Second line on every B: "No number is shown, because your situation changes how the FEIE and the Foreign Tax Credit work together."
-Next step: "Get Started, so an accountant can look at all of your income together."
+No number. Next step on every B: "Get Started, so an accountant can look at all of your income together."
 
-| Reason | Explanation | Read more links |
+| Reason | Explanation (two lines) | Read more links |
 |---|---|---|
-| Earlier unfiled year (Q2) | Earlier years that haven’t been filed change how the FEIE is claimed. A Greenback accountant can look at every year together. | [Late Filers](https://www.greenbacktaxservices.com/who-we-help/late-filers/), [Streamlined Filing Procedures](https://www.greenbacktaxservices.com/knowledge-center/everything-to-know-streamlined-filing/) |
-| No home base (Q3) | The FEIE needs a tax home abroad. Without a fixed base, whether you qualify depends on details an accountant should look at with you. | [Digital Nomads](https://www.greenbacktaxservices.com/who-we-help/digital-nomads/), [Digital Nomad Taxes](https://www.greenbacktaxservices.com/knowledge-center/digital-nomad-taxes/) |
-| Other income (Q8) | Investment, rental and pension income aren’t covered by the FEIE, and they change how the FEIE and the Foreign Tax Credit work together. A Greenback accountant works it out with you. | [Foreign Rental Income](https://www.greenbacktaxservices.com/knowledge-center/report-rental-income-foreign-property/), [Tax Help for U.S. Retirees Living Abroad](https://www.greenbacktaxservices.com/who-we-help/retirees-abroad/) |
+| Earlier unfiled year (Q2) | Earlier years that haven’t been filed change how the FEIE is claimed. A Greenback accountant can look at every year together. / No number is shown, because each year is figured with its own IRS figures and rules. | [Late Filers](https://www.greenbacktaxservices.com/who-we-help/late-filers/), [Streamlined Filing Procedures](https://www.greenbacktaxservices.com/knowledge-center/everything-to-know-streamlined-filing/) |
+| No home base (Q3) | The FEIE needs a tax home abroad. Without a fixed base, whether you qualify depends on details an accountant should look at with you. / No number is shown, because whether the FEIE applies depends on where your tax home is. | [Digital Nomads](https://www.greenbacktaxservices.com/who-we-help/digital-nomads/), [Digital Nomad Taxes](https://www.greenbacktaxservices.com/knowledge-center/digital-nomad-taxes/) |
+| Other income (Q8) | Investment, rental and pension income aren’t covered by the FEIE, and they change how the FEIE and the Foreign Tax Credit work together. A Greenback accountant works it out with you. / No number is shown, because that income changes the math for both the FEIE and the Foreign Tax Credit. | [Foreign Rental Income](https://www.greenbacktaxservices.com/knowledge-center/report-rental-income-foreign-property/), [Tax Help for U.S. Retirees Living Abroad](https://www.greenbacktaxservices.com/who-we-help/retirees-abroad/) |
 
 ### Result C: Strong Fit: $0 U.S. Tax
 Figure: "Estimated U.S. income tax for [YEAR]: $0"
-Text: "Your income is at or below the point where U.S. income tax starts for your filing status (about $[LINE]). You still file a U.S. return to claim the FEIE." (Movers: "With the FEIE covering your pay abroad, your income stays below the point where U.S. income tax starts. You still file a U.S. return to claim the FEIE.")
+Text: "Your income is at or below the point where U.S. income tax starts for your filing status (about $[LINE]). You still file a U.S. return to claim the FEIE."
+Movers: "With the FEIE covering your pay abroad, your income stays below the point where U.S. income tax starts. You still file a U.S. return to claim the FEIE."
 Next step: "Get Started, so we file the return that claims the FEIE."
 
 ### Result D: Good Fit, Some U.S. Tax
 Figure: "Estimated U.S. income tax with the FEIE for [YEAR]: $[LOW] to $[HIGH]"
-Text: "The FEIE covers up to $[LIMIT] of your pay. The rest is taxed at the rate it would face if nothing were excluded."
+Text, first sentence by situation, then "Pay above the limit is taxed at the rate it would face if nothing were excluded.":
+- Default: "The FEIE covers up to $[LIMIT] of your pay."
+- Married jointly, both earning abroad: "The FEIE covers up to $[LIMIT] of each spouse’s pay."
+- Movers: "Because you moved this year, your FEIE limit is cut to about $[REDUCED], the part of $[LIMIT] for the months you lived abroad. U.S. pay before the move is taxed in full."
 Next step: "Get Started, so an accountant can confirm the figure and file your return."
 
 ### Result E: Compare With the FTC
 Figure 1: "Estimated U.S. income tax with the FEIE alone for [YEAR]: $[LOW] to $[HIGH]"
-- Reached from Q10 (foreign tax): Figure 2: "Once foreign tax is credited on the rest: $[LOW] to $[HIGH]". Text: "You pay enough foreign tax that the Foreign Tax Credit may cut your U.S. tax further, either on its own or alongside the FEIE."
-- Reached from Q9 (children): no second figure. Text: "This already takes off up to $[CTC] of child tax credit. With the FEIE you can’t get the refundable part of that credit, so the Foreign Tax Credit often works out better for parents." Extra link: [Child Tax Credit for Expats](https://www.greenbacktaxservices.com/knowledge-center/child-tax-credit-for-expats/)
+- **Reached from Q10:** Figure 2: "Once foreign tax is credited on the rest: $[LOW] to $[HIGH]". Text: "You pay enough foreign tax that the Foreign Tax Credit may cut your U.S. tax further, either on its own or alongside the FEIE." If Q10 was "Not sure": "If you pay 10% or more in foreign income tax, the Foreign Tax Credit may cut your U.S. tax further, either on its own or alongside the FEIE."
+- **Reached from Q9 (children), no second figure:**
+  - If the FEIE estimate is above $0: "This already takes off up to $[CTC] of child tax credit. With the FEIE you can’t get the refundable part of that credit, so the Foreign Tax Credit often works out better for parents."
+  - If the FEIE estimate is $0: "You’d owe $0 with the FEIE, but you’d give up the refundable part of the child tax credit (up to $[1,700 × children]). With the Foreign Tax Credit instead, many parents can claim it as a refund."
+  - Extra link: [Child Tax Credit for Expats](https://www.greenbacktaxservices.com/knowledge-center/child-tax-credit-for-expats/)
 
 Link on every E: [FEIE vs. FTC](https://www.greenbacktaxservices.com/knowledge-center/feie-vs-ftc/)
 Next step: "Get Started, so a Greenback accountant compares the FEIE with the FTC for you."
 
 ### Extra lines that can appear on C, D or E
 - **Self-employed (Q5):** figure "Self-employment tax (not reduced by the FEIE): $[LOW] to $[HIGH]", text "Self-employment tax still applies. A Social Security agreement with your country may remove it.", link [Do U.S. Expats Pay Self-Employment Tax?](https://www.greenbacktaxservices.com/knowledge-center/do-us-expats-pay-self-employment-tax/)
+- **More than one payer (Q5):** text "If part of your pay is self-employment income, self-employment tax may also apply. The FEIE doesn’t reduce it." and the same link. No figure.
 - **Movers (Q3):** link [Moving Abroad](https://www.greenbacktaxservices.com/who-we-help/moving-abroad/)
 
 ---
@@ -350,7 +359,7 @@ Run `node tests/scenarios.test.js` to check the prototype logic. Use the same an
 | 6 | Under 330 days but a full calendar year (bona fide residence) | `base + days: under300, fullYear: yes, foreignTax: 10to20` | E | Estimated U.S. income tax with the FEIE alone for 2026: $6,000 to $12,000 ; Once foreign tax is credited on the rest: $0 to $5,500 |
 | 7 | Paid only by the U.S. government | `base + payer: gov` | A | no figure |
 | 8 | Has rental income | `base + otherIncome: rental` | B | no figure |
-| 9 | Single, $50k to $75k, 2026: below the no-tax line | `base + income: b2` | C | Estimated U.S. income tax for 2026: $0 |
+| 9 | Single, $50k to $75k, 2026: below the no-tax line | `base + income: b2` | C | no figure |
 | 10 | Single, $125k to $150k, 2026: top of band is $1,000 over the line, estimate rounds to $0, so C | `base + income: b5` | C | Estimated U.S. income tax for 2026: $0 |
 | 11 | Single, $150k to $175k, 2026: above the line, Q10 asked | `base + income: b6, foreignTax: under10` | D | Estimated U.S. income tax with the FEIE for 2026: $0 to $6,000 |
 | 12 | Single, $175k to $200k, 2026, low foreign tax (e.g. UAE) | `base + foreignTax: under10` | D | Estimated U.S. income tax with the FEIE for 2026: $6,000 to $12,000 |
@@ -389,7 +398,8 @@ When the IRS publishes next year's inflation adjustments (usually October or Nov
 | `src/figures.js` | All IRS figures by year, and the answer bands |
 | `src/logic.js` | Questions, routing, math and result copy (no DOM; runs in Node too) |
 | `src/app.js` | The on-page UI |
-| `src/styles.css` | Placeholder styling |
+| `src/styles.css` | Greenback design tokens from the live service and Who We Help pages |
+| `assets/greenback-logo.jpg` | Logo for the prototype header |
 | `tests/scenarios.test.js` | Test scenarios (`node tests/scenarios.test.js`) |
 | `tests/build-readme-sections.js` | Regenerates Section 3 of this README from `logic.js` |
 

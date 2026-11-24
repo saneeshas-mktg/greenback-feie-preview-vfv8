@@ -36,7 +36,7 @@
       }, o.label)));
     const card = el('div', { class: 'card question' },
       progress(q),
-      el('h2', { id: name + '-title', class: 'q-title' }, q.title),
+      el('h2', { id: name + '-title', class: 'q-title', tabindex: '-1' }, (id === 'income' && answers.where === 'moved' && q.titleMoved) ? q.titleMoved : q.title),
       el('div', { class: 'helper' },
         el('p', {}, helper),
         showLinks.length ? el('p', { class: 'helper-links' }, 'Learn more: ', ...showLinks.flatMap((k, i) => [i ? ' · ' : '', linkEl(L.LINKS[k])])) : null),
@@ -71,9 +71,10 @@
       r.lines.map(t => el('p', {}, t)),
       r.links.length ? el('p', { class: 'helper-links' }, 'Read more: ', ...r.links.flatMap((l, i) => [i ? ' · ' : '', linkEl(l)])) : null,
       el('div', { class: 'next-step' }, el('div', { class: 'next-label' }, 'Next step'), el('p', {}, r.nextStep),
-        el('button', { type: 'button', class: 'btn-primary', onclick: openGetStarted }, 'Get Started')),
+        el('button', { type: 'button', class: 'btn btn-primary', onclick: openGetStarted }, 'Get Started')),
       el('div', { class: 'not-ready' },
-        el('p', {}, 'Not ready yet? Book a consultation with an accountant, or a free support call for questions about Greenback.'),
+        el('div', { class: 'next-label' }, 'Not ready yet?'),
+        el('p', {}, 'Book a paid consultation with a CPA or Enrolled Agent, or a free support call with the Greenback team.'),
         el('div', { class: 'btn-row' }, linkBtn(L.LINKS.consultation), linkBtn(L.LINKS.supportCall))),
       ['C', 'D', 'E'].includes(r.letter) ? emailAsk() : null,
       el('p', { class: 'small' }, r.estimateLabel + ' ' + r.filingReminder),
@@ -81,7 +82,7 @@
     root.replaceChildren(card);
   }
 
-  const linkBtn = l => el('a', { class: 'btn-secondary', href: l.url, target: '_blank', rel: 'noopener' }, l.label);
+  const linkBtn = l => el('a', { class: 'btn btn-outline', href: l.url, target: '_blank', rel: 'noopener' }, l.label);
 
   // Optional value-add email ask. PROTOTYPE ONLY: nothing is sent or stored.
   function emailAsk() {
@@ -90,7 +91,7 @@
     return el('div', { class: 'email-ask' },
       el('div', { class: 'next-label' }, 'Optional'),
       el('p', {}, 'Want the expanded FEIE spreadsheet to work through your numbers in more detail? We’ll email it to you.'),
-      el('div', { class: 'email-row' }, input, el('button', { type: 'button', class: 'btn-secondary', onclick: () => { status.textContent = 'Prototype only: in the live build this sends the expanded FEIE spreadsheet. Nothing was sent.'; } }, 'Email me the spreadsheet')),
+      el('div', { class: 'email-row' }, input, el('button', { type: 'button', class: 'btn btn-outline', onclick: () => { status.textContent = 'Prototype only: in the live build this sends the expanded FEIE spreadsheet. Nothing was sent.'; } }, 'Email me the spreadsheet')),
       status);
   }
 
@@ -105,5 +106,6 @@
   }
 
   document.getElementById('get-started-close').addEventListener('click', () => document.getElementById('get-started').close());
+  document.querySelectorAll('[data-get-started]').forEach(b => b.addEventListener('click', e => { e.preventDefault(); openGetStarted(); }));
   step();
 })();

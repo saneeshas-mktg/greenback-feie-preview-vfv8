@@ -29,8 +29,8 @@
     retirees: { label: 'Tax Help for U.S. Retirees Living Abroad', url: G + '/who-we-help/retirees-abroad/' },
     ctc: { label: 'Child Tax Credit for Expats', url: G + '/knowledge-center/child-tax-credit-for-expats/' },
     feieVsFtc: { label: 'FEIE vs. FTC', url: G + '/knowledge-center/feie-vs-ftc/' },
-    consultation: { label: 'Book a Consultation', url: G + '/services/expat-tax-consultation/' },
-    supportCall: { label: 'Book a Free Support Call', url: G + '/services/support-call/' },
+    consultation: { label: 'Book a consultation', url: G + '/services/expat-tax-consultation/' },
+    supportCall: { label: 'Book a support call', url: G + '/services/support-call/' },
   };
 
   const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -76,15 +76,22 @@
       helper: 'If your spouse isn’t a U.S. citizen or green card holder, you usually file as married filing separately, unless you choose to file jointly.',
       links: ['foreignSpouse'],
       options: [{ value: 'single', label: 'Single' }, { value: 'hoh', label: 'Head of household' }, { value: 'mfs', label: 'Married filing separately' }, { value: 'mfj', label: 'Married filing jointly' }],
-      next: a => a.filing === 'mfj' ? 'spouseAbroad' : (a.where === 'moved' ? 'moveMonth' : 'income') },
+      next: a => a.filing === 'mfj' ? 'spouseAbroad' : 'income' },
     { id: 'spouseAbroad', number: '6', followUp: true, title: 'Does your spouse also earn income abroad?',
       helper: 'Each spouse who works abroad can exclude their own income, up to the yearly limit each ($132,900 for 2026, $130,000 for 2025).',
       links: [],
       show: a => a.filing === 'mfj',
       options: [{ value: 'yes', label: 'Yes' }, { value: 'no', label: 'No' }],
-      next: a => a.where === 'moved' ? 'moveMonth' : 'income' },
+      next: () => 'income' },
+    { id: 'income', number: '7', title: 'About how much do you earn in a year?',
+      helper: 'If you selected single, head of household or married filing separately, enter your own income. If you’re married filing jointly, enter both incomes together. Count pay and self-employment income before tax, in U.S. dollars.',
+      titleMoved: 'About how much will you earn abroad this year?',
+      helperMoved: 'Enter what you earn abroad this year. If you’re married filing jointly, include both incomes. Before tax, in U.S. dollars.',
+      links: [],
+      options: INCOME_BANDS.map(b => ({ value: b.id, label: b.label })),
+      next: a => a.where === 'moved' ? 'moveMonth' : 'otherIncome' },
     { id: 'moveMonth', number: '7', followUp: true, title: 'Which month did you move abroad?',
-      helper: 'The FEIE limit is cut to the share of the year you lived abroad, so the month you moved changes the estimate.',
+      helper: 'Your FEIE limit is cut to the part of the year you lived abroad, so the month you moved changes the estimate.',
       links: ['movingAbroad'],
       show: a => a.where === 'moved',
       options: MONTHS.map((m, i) => ({ value: String(i + 1), label: m })),
@@ -94,12 +101,6 @@
       links: [],
       show: a => a.where === 'moved',
       options: US_PAY_BANDS.map(b => ({ value: b.id, label: b.label })),
-      next: () => 'income' },
-    { id: 'income', number: '7', title: 'About how much do you earn in a year?',
-      helper: 'If you selected single, head of household or married filing separately, enter your own income. If you’re married filing jointly, enter both incomes together. Count pay and self-employment income before tax, in U.S. dollars.',
-      helperMoved: 'Enter what you earn abroad this year. If you’re married filing jointly, include both incomes. Before tax, in U.S. dollars.',
-      links: [],
-      options: INCOME_BANDS.map(b => ({ value: b.id, label: b.label })),
       next: () => 'otherIncome' },
     { id: 'otherIncome', number: '8', title: 'Do you have any other income?',
       helper: 'The FEIE only covers pay for work. Investment, rental and pension income are taxed separately.',
@@ -262,6 +263,18 @@
   };
 
   const fmt = n => '$' + Math.round(n).toLocaleString('en-US');
+  // Refundable part of the child tax credit (Additional Child Tax Credit) per child, 2025 and 2026. FEIE filers can't claim it.
+  const ACTC_PER_CHILD = 1700;
+
+  function limitSentence(a) {
+    const fig = FIGURES[a.year];
+    if (a.where === 'moved') {
+      const lim = Math.round(fig.feieLimit * abroadShare(a.year, a.moveMonth));
+      return 'Because you moved this year, your FEIE limit is cut to about ' + fmt(lim) + ', the part of ' + fmt(fig.feieLimit) + ' for the months you lived abroad. U.S. pay before the move is taxed in full.';
+    }
+    if (a.filing === 'mfj' && a.spouseAbroad === 'yes') return 'The FEIE covers up to ' + fmt(fig.feieLimit) + ' of each spouse\u2019s pay.';
+    return 'The FEIE covers up to ' + fmt(fig.feieLimit) + ' of your pay.';
+  }
   const fmtRange = (r, open) => open ? 'at least ' + fmt(r[0]) : (r[0] === r[1] ? fmt(r[0]) : fmt(r[0]) + ' to ' + fmt(r[1]));
 
   function buildResult(answers, outcome) {
@@ -272,8 +285,20 @@
       out.lines.push(REASONS[outcome.reason].text);
       out.links = REASONS[outcome.reason].links.slice();
     }
-    if (outcome.result === 'A') out.nextStep = 'Get Started, so a Greenback accountant can plan your first return abroad.';
-    if (outcome.result === 'B') { out.lines.push('No number is shown, because your situation changes how the FEIE and the Foreign Tax Credit work together.'); out.nextStep = 'Get Started, so an accountant can look at all of your income together.'; }
+    if (outcome.result === 'A') out.nextStep = {
+      status: 'Get Started, so a Greenback accountant can tell you what you need to file.',
+      us: 'Get Started, so a Greenback accountant can check what you need to report.',
+      days: 'Get Started, so a Greenback accountant can plan your first return abroad.',
+      gov: 'Get Started, so a Greenback accountant can look at what else you can claim.',
+    }[outcome.reason];
+    if (outcome.result === 'B') {
+      out.lines.push({
+        late: 'No number is shown, because each year is figured with its own IRS figures and rules.',
+        nomad: 'No number is shown, because whether the FEIE applies depends on where your tax home is.',
+        other: 'No number is shown, because that income changes the math for both the FEIE and the Foreign Tax Credit.',
+      }[outcome.reason]);
+      out.nextStep = 'Get Started, so an accountant can look at all of your income together.';
+    }
     if (['C', 'D', 'E'].includes(outcome.result)) {
       const r = rangeFor(answers);
       if (outcome.result === 'C') {
@@ -285,17 +310,22 @@
       }
       if (outcome.result === 'D') {
         out.figures.push({ label: 'Estimated U.S. income tax with the FEIE' + yearLabel, value: fmtRange(r.feie, r.openEnded) });
-        out.lines.push('The FEIE covers up to ' + fmt(FIGURES[answers.year].feieLimit) + ' of your pay. The rest is taxed at the rate it would face if nothing were excluded.');
+        out.lines.push(limitSentence(answers) + ' Pay above the limit is taxed at the rate it would face if nothing were excluded.');
         out.nextStep = 'Get Started, so an accountant can confirm the figure and file your return.';
       }
       if (outcome.result === 'E') {
         out.figures.push({ label: 'Estimated U.S. income tax with the FEIE alone' + yearLabel, value: fmtRange(r.feie, r.openEnded) });
         if (outcome.reason === 'children') {
-          out.lines.push('This already takes off up to ' + fmt(r.ctc) + ' of child tax credit. With the FEIE you can’t get the refundable part of that credit, so the Foreign Tax Credit often works out better for parents.');
+          const kids = Number(answers.children);
+          out.lines.push(r.feie[1] === 0
+            ? 'You’d owe $0 with the FEIE, but you’d give up the refundable part of the child tax credit (up to ' + fmt(ACTC_PER_CHILD * kids) + '). With the Foreign Tax Credit instead, many parents can claim it as a refund.'
+            : 'This already takes off up to ' + fmt(r.ctc) + ' of child tax credit. With the FEIE you can’t get the refundable part of that credit, so the Foreign Tax Credit often works out better for parents.');
           out.links.push('ctc');
         } else {
           out.figures.push({ label: 'Once foreign tax is credited on the rest', value: r.openEnded ? (r.ftc[0] === r.ftc[1] ? fmt(r.ftc[0]) : 'from ' + fmt(r.ftc[0])) : fmtRange(r.ftc, false) });
-          out.lines.push('You pay enough foreign tax that the Foreign Tax Credit may cut your U.S. tax further, either on its own or alongside the FEIE.');
+          out.lines.push(answers.foreignTax === 'notSure'
+            ? 'If you pay 10% or more in foreign income tax, the Foreign Tax Credit may cut your U.S. tax further, either on its own or alongside the FEIE.'
+            : 'You pay enough foreign tax that the Foreign Tax Credit may cut your U.S. tax further, either on its own or alongside the FEIE.');
         }
         out.links.push('feieVsFtc');
         out.nextStep = 'Get Started, so a Greenback accountant compares the FEIE with the FTC for you.';
@@ -303,6 +333,10 @@
       if (r.se) {
         out.figures.push({ label: 'Self-employment tax (not reduced by the FEIE)', value: fmtRange(r.se, r.openEnded) });
         out.lines.push('Self-employment tax still applies. A Social Security agreement with your country may remove it.');
+        out.links.push('seTax');
+      }
+      if (answers.payer === 'mixed') {
+        out.lines.push('If part of your pay is self-employment income, self-employment tax may also apply. The FEIE doesn\u2019t reduce it.');
         out.links.push('seTax');
       }
       if (answers.where === 'moved') out.links.push('movingAbroad');
