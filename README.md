@@ -4,6 +4,23 @@
 **Page:** `https://www.greenbacktaxservices.com/tools/feie-calculator/`
 **Timeline:** kickoff Monday, Nov 30 · build in December · live early to mid January, before tax season opens at the end of January
 
+**Live prototype:** https://saneeshas-mktg.github.io/greenback-feie-preview-vfv8/
+
+> The prototype carries a `noindex` tag and a `robots.txt`, so search engines skip it. The URL itself is
+> public, though — anyone with the link can open it, so please don't post it anywhere.
+
+## Start here
+
+**Nahuel** — open the live prototype and click through a few paths first, then read §1 (Must-haves) and
+§2 (How the flow works). §3 has every question, helper text and link; §4 is the math; §6 is the test
+scenarios to build against. `node tests/scenarios.test.js` runs those — all 22 must pass.
+
+**Hasalyn** — open the live prototype and review the copy: §3 (questions and helper text) and §5 (result
+copy for all five outcomes). Please also check the 2026 IRS figures in §4 against the IRS source before
+this goes live — they cite Rev. Proc. 2025-32 but haven't been independently verified.
+
+---
+
 This repo has two things:
 
 1. **A working prototype** (`index.html` + `src/`). Open `index.html` in a browser and click through every path. The questions, branching, math and result copy are final. The styling follows the new service pages and Ariele's Support Call and Consultations designs: the calculator sits in the hero where the form card sits on those pages. Swap the prototype CSS for the site's own classes (`btn-primary`, `btn-orange`, the services-hub hero, the FAQ accordion). There is no stats strip on this page. Every heading, question, answer, label and button is in Title Case; keep it that way.
