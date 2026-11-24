@@ -106,7 +106,13 @@
       helper: 'The FEIE only covers pay for work. Investment, rental and pension income are taxed separately.',
       links: [],
       options: [{ value: 'none', label: 'None' }, { value: 'investment', label: 'Investment' }, { value: 'rental', label: 'Rental' }, { value: 'pension', label: 'Pension' }, { value: 'multiple', label: 'More than one' }],
-      next: a => a.otherIncome === 'none' ? 'children' : { result: 'B', reason: 'other' } },
+      next: a => a.otherIncome === 'none' ? 'children' : 'otherAmount' },
+    { id: 'otherAmount', number: '8', followUp: true, title: 'About how much of that income do you get in a year?',
+      helper: 'Small amounts can still be estimated. Larger amounts change how the FEIE and the Foreign Tax Credit work together, so an accountant looks at them with you.',
+      links: [],
+      show: a => a.otherIncome && a.otherIncome !== 'none',
+      options: [{ value: 'under5k', label: 'Under $5,000' }, { value: '5kPlus', label: '$5,000 or more' }, { value: 'notSure', label: 'Not sure' }],
+      next: a => a.otherAmount === 'under5k' ? 'children' : { result: 'B', reason: 'other' } },
     { id: 'children', number: '9', title: 'How many children under 17 live with you?',
       helper: 'Claiming the FEIE means you can’t get the refundable part of the child tax credit, so the Foreign Tax Credit is often the better fit for parents.',
       links: ['ctc'],
@@ -158,7 +164,7 @@
     // Two earners: each spouse excludes their own pay. We assume the household income is split evenly.
     const twoEarners = status === 'mfj' && p.spouseAbroad === 'yes';
     const excluded = twoEarners ? 2 * Math.min(p.foreignIncome / 2, limitEach) : Math.min(p.foreignIncome, limitEach);
-    const gross = p.foreignIncome + (p.usIncome || 0);
+    const gross = p.foreignIncome + (p.usIncome || 0) + (p.otherIncome || 0); // other income is never excluded
     const taxable = Math.max(0, gross - excluded - fig.standardDeduction[status]);
     // Stacking rule (Form 2555 / Foreign Earned Income Tax Worksheet):
     // tax on (taxable income + excluded amount) minus tax on the excluded amount.
@@ -180,6 +186,8 @@
   }
 
   const band = (list, id) => list.find(b => b.id === id);
+  // Small other income (Q8 follow-up 'Under $5,000'): estimated across $0 to $5,000 and taxed in full.
+  const OTHER_SMALL = { lo: 0, hi: 5000 };
   const round500 = n => Math.round(n / 500) * 500;
 
   function noTaxLine(a) {
@@ -194,6 +202,7 @@
     const inc = band(INCOME_BANDS, a.income);
     const us = a.where === 'moved' ? band(US_PAY_BANDS, a.usPay).hi : 0;
     if (inc.openEnded) return false;
+    if (a.otherAmount === 'under5k') return round500(estimate(Object.assign(paramsFor(a, inc.hi, us, 0), { otherIncome: OTHER_SMALL.hi })).feieTax) === 0;
     // Below the line means the estimate at the top of the band rounds to $0 (movers: U.S. pay is included, since it's fully taxed).
     return round500(estimate(paramsFor(a, inc.hi, us, 0)).feieTax) === 0;
   }
@@ -202,7 +211,7 @@
     return {
       year: a.year, filing: a.filing, spouseAbroad: a.spouseAbroad,
       moveMonth: a.where === 'moved' ? a.moveMonth : null,
-      foreignIncome, usIncome, children: Number(a.children || 0),
+      foreignIncome, usIncome, children: Number(a.children || 0), otherIncome: 0,
       selfEmployed: a.payer === 'self', foreignTaxRate: rate,
     };
   }
@@ -212,8 +221,9 @@
     const inc = band(INCOME_BANDS, a.income);
     const us = a.where === 'moved' ? band(US_PAY_BANDS, a.usPay) : { lo: 0, hi: 0 };
     const ft = a.foreignTax ? FOREIGN_TAX_BANDS[a.foreignTax] : null;
-    const lowP = paramsFor(a, inc.lo, us.lo, ft ? ft.hi : 0);
-    const highP = paramsFor(a, inc.hi, us.hi, ft ? ft.lo : 0);
+    const other = a.otherAmount === 'under5k' ? OTHER_SMALL : { lo: 0, hi: 0 };
+    const lowP = Object.assign(paramsFor(a, inc.lo, us.lo, ft ? ft.hi : 0), { otherIncome: other.lo });
+    const highP = Object.assign(paramsFor(a, inc.hi, us.hi, ft ? ft.lo : 0), { otherIncome: other.hi });
     const lo = estimate(lowP), hi = estimate(highP);
     return {
       openEnded: !!inc.openEnded,
@@ -334,6 +344,11 @@
         out.figures.push({ label: 'Self-employment tax (not reduced by the FEIE)', value: fmtRange(r.se, r.openEnded) });
         out.lines.push('Self-employment tax still applies. A Social Security agreement with your country may remove it.');
         out.links.push('seTax');
+      }
+      if (answers.otherAmount === 'under5k') {
+        const kind = { investment: 'investment', rental: 'rental', pension: 'pension', multiple: 'other' }[answers.otherIncome];
+        out.lines.push('Your ' + kind + ' income (under $5,000) is included and taxed in full, because the FEIE only covers pay for work. Some investment income is taxed at lower rates, so the estimate may run a little high.');
+        out.links.push(answers.otherIncome === 'pension' ? 'retirees' : 'rental');
       }
       if (answers.payer === 'mixed') {
         out.lines.push('If part of your pay is self-employment income, self-employment tax may also apply. The FEIE doesn\u2019t reduce it.');

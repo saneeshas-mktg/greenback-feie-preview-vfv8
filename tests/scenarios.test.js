@@ -16,7 +16,9 @@ const S = [
   { name: 'Under 330 days, no full calendar year', a: { ...base, days: '300to329', fullYear: 'no' }, result: 'A', reason: 'days' },
   { name: 'Under 330 days but a full calendar year (bona fide residence)', a: { ...base, days: 'under300', fullYear: 'yes', foreignTax: '10to20' }, result: 'E', reason: 'foreignTax' },
   { name: 'Paid only by the U.S. government', a: { ...base, payer: 'gov' }, result: 'A', reason: 'gov' },
-  { name: 'Has rental income', a: { ...base, otherIncome: 'rental' }, result: 'B', reason: 'other' },
+  { name: 'Rental income of $5,000 or more', a: { ...base, otherIncome: 'rental', otherAmount: '5kPlus' }, result: 'B', reason: 'other' },
+  { name: 'Not sure how much investment income', a: { ...base, otherIncome: 'investment', otherAmount: 'notSure' }, result: 'B', reason: 'other' },
+  { name: 'Small investment income under $5,000 still gets an estimate', a: { ...base, otherIncome: 'investment', otherAmount: 'under5k', foreignTax: 'under10' }, result: 'D', feie: [6000, 13500] },
   // Math results
   { name: 'Single, $50k to $75k, 2026: below the no-tax line', a: { ...base, income: 'b2' }, result: 'C' },
   { name: 'Single, $125k to $150k, 2026: top of band is $1,000 over the line, estimate rounds to $0, so C', a: { ...base, income: 'b5' }, result: 'C' },
