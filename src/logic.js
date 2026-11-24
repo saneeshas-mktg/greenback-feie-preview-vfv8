@@ -8,29 +8,29 @@
 
   const G = 'https://www.greenbacktaxservices.com';
   const LINKS = {
-    citizens: { label: 'Taxes for U.S. citizens living abroad', url: G + '/who-we-help/taxes-for-us-citizens-living-abroad/' },
+    citizens: { label: 'Taxes for U.S. Citizens Living Abroad', url: G + '/who-we-help/taxes-for-us-citizens-living-abroad/' },
     foreignNationals: { label: 'Tax Help for Visa and Green Card Holders', url: G + '/who-we-help/foreign-nationals/' },
     foreigners: { label: 'U.S. Taxes for Foreigners', url: G + '/knowledge-center/us-taxes-for-foreigners/' },
-    deadlines: { label: 'U.S. tax deadlines for Americans abroad', url: G + '/knowledge-center/tax-deadlines-expats/' },
+    deadlines: { label: 'U.S. Tax Deadlines for Americans Abroad', url: G + '/knowledge-center/tax-deadlines-expats/' },
     lateFilers: { label: 'Late Filers', url: G + '/who-we-help/late-filers/' },
     streamlined: { label: 'Streamlined Filing Procedures', url: G + '/knowledge-center/everything-to-know-streamlined-filing/' },
     digitalNomads: { label: 'Digital Nomads', url: G + '/who-we-help/digital-nomads/' },
     digitalNomadTaxes: { label: 'Digital Nomad Taxes', url: G + '/knowledge-center/digital-nomad-taxes/' },
-    fbar: { label: 'FBAR guide', url: G + '/knowledge-center/fbar/' },
-    propertyAbroad: { label: 'Tax Help for Americans with Property Abroad', url: G + '/who-we-help/foreign-property-owners/' },
+    fbar: { label: 'FBAR Guide', url: G + '/knowledge-center/fbar/' },
+    propertyAbroad: { label: 'Tax Help for Americans With Property Abroad', url: G + '/who-we-help/foreign-property-owners/' },
     movingAbroad: { label: 'Moving Abroad', url: G + '/who-we-help/moving-abroad/' },
     ppt: { label: 'Physical Presence Test', url: G + '/knowledge-center/physical-presence-test/' },
     bfr: { label: 'Bona Fide Residence Test', url: G + '/knowledge-center/bona-fide-residence-test/' },
     form2350: { label: 'Form 2350', url: G + '/knowledge-center/form-2350/' },
     seTax: { label: 'Do U.S. Expats Pay Self-Employment Tax?', url: G + '/knowledge-center/do-us-expats-pay-self-employment-tax/' },
-    feieGuide: { label: 'FEIE guide', url: G + '/knowledge-center/tips-updates-foreign-earned-income-exclusion/' },
-    foreignSpouse: { label: 'Filing with a foreign spouse', url: G + '/knowledge-center/filing-joint-taxes-foreign-spouse/' },
+    feieGuide: { label: 'FEIE Guide', url: G + '/knowledge-center/tips-updates-foreign-earned-income-exclusion/' },
+    foreignSpouse: { label: 'Filing With a Foreign Spouse', url: G + '/knowledge-center/filing-joint-taxes-foreign-spouse/' },
     rental: { label: 'Foreign Rental Income', url: G + '/knowledge-center/report-rental-income-foreign-property/' },
     retirees: { label: 'Tax Help for U.S. Retirees Living Abroad', url: G + '/who-we-help/retirees-abroad/' },
     ctc: { label: 'Child Tax Credit for Expats', url: G + '/knowledge-center/child-tax-credit-for-expats/' },
     feieVsFtc: { label: 'FEIE vs. FTC', url: G + '/knowledge-center/feie-vs-ftc/' },
-    consultation: { label: 'Book a consultation', url: G + '/services/expat-tax-consultation/' },
-    supportCall: { label: 'Book a support call', url: G + '/services/support-call/' },
+    consultation: { label: 'Book a Consultation', url: G + '/services/expat-tax-consultation/' },
+    supportCall: { label: 'Book a Support Call', url: G + '/services/support-call/' },
   };
 
   const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'];
@@ -41,91 +41,91 @@
    * Order of the array is the order shown.
    */
   const QUESTIONS = [
-    { id: 'status', number: '1', title: 'What is your U.S. tax status?',
-      helper: 'U.S. citizens and green card holders file a U.S. tax return every year, wherever they live. The FEIE is how many of them keep the same income from being taxed twice.',
+    { id: 'status', number: '1', title: 'What Is Your U.S. Tax Status?',
+      helper: 'U.S. citizens and green card holders file a U.S. tax return each year their income is over the filing threshold, wherever they live. The FEIE is how many of them keep the same income from being taxed twice.',
       links: ['citizens'],
-      options: [{ value: 'citizen', label: 'U.S. citizen' }, { value: 'greenCard', label: 'Green card holder' }, { value: 'neither', label: 'Neither' }],
+      options: [{ value: 'citizen', label: 'U.S. Citizen' }, { value: 'greenCard', label: 'Green Card Holder' }, { value: 'neither', label: 'Neither' }],
       next: a => a.status === 'neither' ? { result: 'A', reason: 'status' } : 'year' },
-    { id: 'year', number: '2', title: 'Which tax year are you estimating?',
-      helper: 'A tax year is the calendar year your income was earned. Income from January to December 2025 goes on the return you file in 2026.',
+    { id: 'year', number: '2', title: 'Which Tax Year Are You Estimating?',
+      helper: 'A tax year is the calendar year your income was earned. Income from January to December 2026 goes on the return you file in 2027.',
       links: ['deadlines'],
-      options: [{ value: '2025', label: '2025 (filing now or on extension)' }, { value: '2026', label: '2026' }, { value: 'earlier', label: 'An earlier year I haven’t filed' }],
+      options: [{ value: '2026', label: '2026 (Filing in 2027)' }, { value: 'earlier', label: 'An Earlier Year I Haven’t Filed' }],
       next: a => a.year === 'earlier' ? { result: 'B', reason: 'late' } : 'where' },
-    { id: 'where', number: '3', title: 'Where do you live right now?',
+    { id: 'where', number: '3', title: 'Where Do You Live Right Now?',
       helper: 'The FEIE only covers income from work you do while living outside the U.S. If you live in the U.S. and work remotely for a company abroad, it doesn’t apply.',
       links: [],
-      options: [{ value: 'oneCountry', label: 'In one country outside the U.S.' }, { value: 'moved', label: 'I moved abroad this year' }, { value: 'fewCountries', label: 'I live in a few countries during the year' }, { value: 'noBase', label: 'I travel full time with no home base' }, { value: 'us', label: 'I still live in the U.S.' }],
+      options: [{ value: 'oneCountry', label: 'In One Country Outside the U.S.' }, { value: 'moved', label: 'I Moved Abroad This Year' }, { value: 'fewCountries', label: 'I Live in a Few Countries During the Year' }, { value: 'noBase', label: 'I Travel Full Time With No Home Base' }, { value: 'us', label: 'I Still Live in the U.S.' }],
       next: a => a.where === 'noBase' ? { result: 'B', reason: 'nomad' } : a.where === 'us' ? { result: 'A', reason: 'us' } : 'days' },
-    { id: 'days', number: '4', title: 'In any 12 months in a row, how many full days were you outside the U.S.?',
+    { id: 'days', number: '4', title: 'In Any 12 Months in a Row, How Many Full Days Were You Outside the U.S.?',
       helper: 'A full day runs from midnight to midnight. The days don’t have to be in one country, and the 12 months don’t have to match the calendar year. If you moved recently and plan to stay, count the 12 months from your move.',
       links: ['ppt'],
-      options: [{ value: '330plus', label: '330 or more' }, { value: '300to329', label: '300 to 329' }, { value: 'under300', label: 'Under 300' }, { value: 'notSure', label: 'Not sure yet' }],
+      options: [{ value: '330plus', label: '330 or More' }, { value: '300to329', label: '300 to 329' }, { value: 'under300', label: 'Under 300' }, { value: 'notSure', label: 'Not Sure Yet' }],
       next: a => a.days === '330plus' ? 'payer' : 'fullYear' },
-    { id: 'fullYear', number: '4', followUp: true, title: 'Have you lived in one country for a full calendar year?',
-      helper: 'A full calendar year is January 1 to December 31. Short trips away are fine if you kept your home there.',
+    { id: 'fullYear', number: '4', followUp: true, title: 'Have You Lived in One Country for a Full Calendar Year?',
+      helper: 'A full calendar year is January 1 to December 31. Short trips away are fine if you kept your home there. Green card holders can usually use this test only if they’re a citizen of a country with a U.S. tax treaty.',
       links: ['bfr'],
       show: a => a.days && a.days !== '330plus',
       options: [{ value: 'yes', label: 'Yes' }, { value: 'no', label: 'No' }],
       next: a => a.fullYear === 'yes' ? 'payer' : { result: 'A', reason: 'days' } },
-    { id: 'payer', number: '5', title: 'Who pays you?',
+    { id: 'payer', number: '5', title: 'Who Pays You?',
       helper: 'Where your employer is based doesn’t decide it. What counts is where you live and do the work. Pay from the U.S. government can’t be excluded.',
       links: ['seTax'], linksNote: 'Self-employed readers see this link:',
-      options: [{ value: 'foreignCo', label: 'A foreign company' }, { value: 'usCo', label: 'A U.S. company' }, { value: 'self', label: 'I’m self-employed' }, { value: 'mixed', label: 'More than one' }, { value: 'gov', label: 'Only the U.S. government or military' }],
+      options: [{ value: 'foreignCo', label: 'A Foreign Company' }, { value: 'usCo', label: 'A U.S. Company' }, { value: 'self', label: 'I’m Self-Employed' }, { value: 'mixed', label: 'More Than One' }, { value: 'gov', label: 'Only the U.S. Government or Military' }],
       next: a => a.payer === 'gov' ? { result: 'A', reason: 'gov' } : 'filing' },
-    { id: 'filing', number: '6', title: 'What is your filing status?',
+    { id: 'filing', number: '6', title: 'What Is Your Filing Status?',
       helper: 'If your spouse isn’t a U.S. citizen or green card holder, you usually file as married filing separately, unless you choose to file jointly.',
       links: ['foreignSpouse'],
-      options: [{ value: 'single', label: 'Single' }, { value: 'hoh', label: 'Head of household' }, { value: 'mfs', label: 'Married filing separately' }, { value: 'mfj', label: 'Married filing jointly' }],
+      options: [{ value: 'single', label: 'Single' }, { value: 'hoh', label: 'Head of Household' }, { value: 'mfs', label: 'Married Filing Separately' }, { value: 'mfj', label: 'Married Filing Jointly' }],
       next: a => a.filing === 'mfj' ? 'spouseAbroad' : 'income' },
-    { id: 'spouseAbroad', number: '6', followUp: true, title: 'Does your spouse also earn income abroad?',
-      helper: 'Each spouse who works abroad can exclude their own income, up to the yearly limit each ($132,900 for 2026, $130,000 for 2025).',
+    { id: 'spouseAbroad', number: '6', followUp: true, title: 'Does Your Spouse Also Earn Income Abroad?',
+      helper: 'Each spouse who works abroad can exclude their own income, up to $132,900 each for 2026.',
       links: [],
       show: a => a.filing === 'mfj',
       options: [{ value: 'yes', label: 'Yes' }, { value: 'no', label: 'No' }],
       next: () => 'income' },
-    { id: 'income', number: '7', title: 'About how much do you earn in a year?',
-      helper: 'If you selected single, head of household or married filing separately, enter your own income. If you’re married filing jointly, enter both incomes together. Count pay and self-employment income before tax, in U.S. dollars.',
-      titleMoved: 'About how much will you earn abroad this year?',
+    { id: 'income', number: '7', title: 'About How Much Do You Earn in a Year?',
+      helper: 'If you selected single, head of household or married filing separately, enter your own income. If you’re married filing jointly, enter both incomes together. Count pay before tax and self-employment profit after business expenses, in U.S. dollars.',
+      titleMoved: 'About How Much Will You Earn Abroad This Year?',
       helperMoved: 'Enter what you earn abroad this year. If you’re married filing jointly, include both incomes. Before tax, in U.S. dollars.',
       links: [],
       options: INCOME_BANDS.map(b => ({ value: b.id, label: b.label })),
       next: a => a.where === 'moved' ? 'moveMonth' : 'otherIncome' },
-    { id: 'moveMonth', number: '7', followUp: true, title: 'Which month did you move abroad?',
+    { id: 'moveMonth', number: '7', followUp: true, title: 'Which Month Did You Move Abroad?',
       helper: 'Your FEIE limit is cut to the part of the year you lived abroad, so the month you moved changes the estimate.',
       links: ['movingAbroad'],
       show: a => a.where === 'moved',
       options: MONTHS.map((m, i) => ({ value: String(i + 1), label: m })),
       next: () => 'usPay' },
-    { id: 'usPay', number: '7', followUp: true, title: 'About how much did you earn in the U.S. this year before moving?',
+    { id: 'usPay', number: '7', followUp: true, title: 'About How Much Did You Earn in the U.S. This Year Before Moving?',
       helper: 'Pay for work done in the U.S. is fully taxed. Count it before tax.',
       links: [],
       show: a => a.where === 'moved',
       options: US_PAY_BANDS.map(b => ({ value: b.id, label: b.label })),
       next: () => 'otherIncome' },
-    { id: 'otherIncome', number: '8', title: 'Do you have any other income?',
+    { id: 'otherIncome', number: '8', title: 'Do You Have Any Other Income?',
       helper: 'The FEIE only covers pay for work. Investment, rental and pension income are taxed separately.',
       links: [],
-      options: [{ value: 'none', label: 'None' }, { value: 'investment', label: 'Investment' }, { value: 'rental', label: 'Rental' }, { value: 'pension', label: 'Pension' }, { value: 'multiple', label: 'More than one' }],
+      options: [{ value: 'none', label: 'None' }, { value: 'investment', label: 'Investment' }, { value: 'rental', label: 'Rental' }, { value: 'pension', label: 'Pension' }, { value: 'multiple', label: 'More Than One' }],
       next: a => a.otherIncome === 'none' ? 'children' : 'otherAmount' },
-    { id: 'otherAmount', number: '8', followUp: true, title: 'About how much of that income do you get in a year?',
+    { id: 'otherAmount', number: '8', followUp: true, title: 'About How Much of That Income Do You Get in a Year?',
       helper: 'Small amounts can still be estimated. Larger amounts change how the FEIE and the Foreign Tax Credit work together, so an accountant looks at them with you.',
       links: [],
       show: a => a.otherIncome && a.otherIncome !== 'none',
-      options: [{ value: 'under5k', label: 'Under $5,000' }, { value: '5kPlus', label: '$5,000 or more' }, { value: 'notSure', label: 'Not sure' }],
+      options: [{ value: 'under5k', label: 'Under $5,000' }, { value: '5kPlus', label: '$5,000 or More' }, { value: 'notSure', label: 'Not Sure' }],
       next: a => a.otherAmount === 'under5k' ? 'children' : { result: 'B', reason: 'other' } },
-    { id: 'children', number: '9', title: 'How many children under 17 live with you?',
+    { id: 'children', number: '9', title: 'How Many Children Under 17 Live With You?',
       helper: 'Claiming the FEIE means you can’t get the refundable part of the child tax credit, so the Foreign Tax Credit is often the better fit for parents.',
       links: ['ctc'],
-      options: [{ value: '0', label: 'None' }, { value: '1', label: '1' }, { value: '2', label: '2' }, { value: '3', label: '3 or more' }],
+      options: [{ value: '0', label: 'None' }, { value: '1', label: '1' }, { value: '2', label: '2' }, { value: '3', label: '3 or More' }],
       next: a => {
         if (a.children !== '0') return { result: 'E', reason: 'children' };
         // Automatic check (never shown): below the no-tax line goes straight to C.
         return isBelowNoTaxLine(a) ? { result: 'C', reason: 'belowLine' } : 'foreignTax';
       } },
-    { id: 'foreignTax', number: '10', title: 'About what share of your pay goes to income tax where you live?',
+    { id: 'foreignTax', number: '10', title: 'About What Share of Your Pay Goes to Income Tax Where You Live?',
       helper: 'If you pay 10% or more in foreign income tax, the Foreign Tax Credit may lower your U.S. tax further.',
       links: ['feieVsFtc'],
-      options: [{ value: 'under10', label: 'None or under 10%' }, { value: '10to20', label: '10% to 20%' }, { value: 'over20', label: 'Over 20%' }, { value: 'notSure', label: 'Not sure' }],
+      options: [{ value: 'under10', label: 'None or Under 10%' }, { value: '10to20', label: '10% to 20%' }, { value: 'over20', label: 'Over 20%' }, { value: 'notSure', label: 'Not Sure' }],
       next: a => a.foreignTax === 'under10' ? { result: 'D', reason: 'lowForeignTax' } : { result: 'E', reason: 'foreignTax' } },
   ];
   const BY_ID = Object.fromEntries(QUESTIONS.map(q => [q.id, q]));
@@ -170,7 +170,11 @@
     // tax on (taxable income + excluded amount) minus tax on the excluded amount.
     const brackets = fig.brackets[status];
     const feieTax = taxable > 0 ? bracketTax(taxable + excluded, brackets) - bracketTax(excluded, brackets) : 0;
-    const ctcMax = fig.childTaxCredit * (p.children || 0);
+    // Child tax credit phases out by $50 per $1,000 (or part) of income over $200,000 ($400,000 married filing jointly).
+    // The income used here adds back the excluded foreign pay (IRC 24(b)).
+    const ctcStart = status === 'mfj' ? 400000 : 200000;
+    const ctcCut = gross > ctcStart ? 50 * Math.ceil((gross - ctcStart) / 1000) : 0;
+    const ctcMax = Math.max(0, fig.childTaxCredit * (p.children || 0) - ctcCut);
     const ctcUsed = Math.min(feieTax, ctcMax); // only the nonrefundable part: the FEIE blocks the refundable part
     const feieTaxAfterCtc = feieTax - ctcUsed;
     // Foreign Tax Credit on the foreign income above the exclusion (credit can't exceed the U.S. tax).
@@ -259,7 +263,7 @@
     B: { name: 'Get Started for a Personal Review', color: 'blue' },
     C: { name: 'Strong Fit: $0 U.S. Tax', color: 'green' },
     D: { name: 'Good Fit, Some U.S. Tax', color: 'yellow' },
-    E: { name: 'Compare With the FTC', color: 'purple' },
+    E: { name: 'Compare With the Foreign Tax Credit', color: 'purple' },
   };
 
   const REASONS = {
@@ -282,7 +286,7 @@
       const lim = Math.round(fig.feieLimit * abroadShare(a.year, a.moveMonth));
       return 'Because you moved this year, your FEIE limit is cut to about ' + fmt(lim) + ', the part of ' + fmt(fig.feieLimit) + ' for the months you lived abroad. U.S. pay before the move is taxed in full.';
     }
-    if (a.filing === 'mfj' && a.spouseAbroad === 'yes') return 'The FEIE covers up to ' + fmt(fig.feieLimit) + ' of each spouse\u2019s pay.';
+    if (a.filing === 'mfj' && a.spouseAbroad === 'yes') return 'The FEIE covers up to ' + fmt(fig.feieLimit) + ' of each spouse\u2019s pay. This estimate assumes you each earn about half.';
     return 'The FEIE covers up to ' + fmt(fig.feieLimit) + ' of your pay.';
   }
   const fmtRange = (r, open) => open ? 'at least ' + fmt(r[0]) : (r[0] === r[1] ? fmt(r[0]) : fmt(r[0]) + ' to ' + fmt(r[1]));
@@ -307,24 +311,25 @@
         nomad: 'No number is shown, because whether the FEIE applies depends on where your tax home is.',
         other: 'No number is shown, because that income changes the math for both the FEIE and the Foreign Tax Credit.',
       }[outcome.reason]);
-      out.nextStep = 'Get Started, so an accountant can look at all of your income together.';
+      out.nextStep = 'Get Started, so a Greenback accountant can look at all of your income together.';
     }
     if (['C', 'D', 'E'].includes(outcome.result)) {
       const r = rangeFor(answers);
       if (outcome.result === 'C') {
-        out.figures.push({ label: 'Estimated U.S. income tax' + yearLabel, value: '$0' });
+        out.figures.push({ label: 'Estimated U.S. Income Tax' + yearLabel, value: '$0' });
         out.lines.push(answers.where === 'moved'
           ? 'With the FEIE covering your pay abroad, your income stays below the point where U.S. income tax starts. You still file a U.S. return to claim the FEIE.'
-          : 'Your income is at or below the point where U.S. income tax starts for your filing status (about ' + fmt(r.line) + '). You still file a U.S. return to claim the FEIE.');
-        out.nextStep = 'Get Started, so we file the return that claims the FEIE.';
+          : 'Your income is at or below the point where U.S. income tax starts for your filing status (about ' + fmt(r.line) + '). You still file a U.S. return to claim the FEIE.'
+            + (answers.filing === 'mfj' && answers.spouseAbroad === 'yes' ? ' This assumes you each earn about half, and neither of you earns more than ' + fmt(FIGURES[answers.year].feieLimit) + '.' : ''));
+        out.nextStep = 'Get Started, so a Greenback accountant can file the return that claims the FEIE.';
       }
       if (outcome.result === 'D') {
-        out.figures.push({ label: 'Estimated U.S. income tax with the FEIE' + yearLabel, value: fmtRange(r.feie, r.openEnded) });
+        out.figures.push({ label: 'Estimated U.S. Income Tax With the FEIE' + yearLabel, value: fmtRange(r.feie, r.openEnded) });
         out.lines.push(limitSentence(answers) + ' Pay above the limit is taxed at the rate it would face if nothing were excluded.');
-        out.nextStep = 'Get Started, so an accountant can confirm the figure and file your return.';
+        out.nextStep = 'Get Started, so a Greenback accountant can confirm the figure and file your return.';
       }
       if (outcome.result === 'E') {
-        out.figures.push({ label: 'Estimated U.S. income tax with the FEIE alone' + yearLabel, value: fmtRange(r.feie, r.openEnded) });
+        out.figures.push({ label: 'Estimated U.S. Income Tax With the FEIE Alone' + yearLabel, value: fmtRange(r.feie, r.openEnded) });
         if (outcome.reason === 'children') {
           const kids = Number(answers.children);
           out.lines.push(r.feie[1] === 0
@@ -332,7 +337,7 @@
             : 'This already takes off up to ' + fmt(r.ctc) + ' of child tax credit. With the FEIE you can’t get the refundable part of that credit, so the Foreign Tax Credit often works out better for parents.');
           out.links.push('ctc');
         } else {
-          out.figures.push({ label: 'Once foreign tax is credited on the rest', value: r.openEnded ? (r.ftc[0] === r.ftc[1] ? fmt(r.ftc[0]) : 'from ' + fmt(r.ftc[0])) : fmtRange(r.ftc, false) });
+          out.figures.push({ label: 'Once Foreign Tax Is Credited on the Rest', value: r.openEnded ? (r.ftc[0] === r.ftc[1] ? fmt(r.ftc[0]) : 'from ' + fmt(r.ftc[0])) : fmtRange(r.ftc, false) });
           out.lines.push(answers.foreignTax === 'notSure'
             ? 'If you pay 10% or more in foreign income tax, the Foreign Tax Credit may cut your U.S. tax further, either on its own or alongside the FEIE.'
             : 'You pay enough foreign tax that the Foreign Tax Credit may cut your U.S. tax further, either on its own or alongside the FEIE.');
@@ -341,7 +346,7 @@
         out.nextStep = 'Get Started, so a Greenback accountant compares the FEIE with the FTC for you.';
       }
       if (r.se) {
-        out.figures.push({ label: 'Self-employment tax (not reduced by the FEIE)', value: fmtRange(r.se, r.openEnded) });
+        out.figures.push({ label: 'Self-Employment Tax (Not Reduced by the FEIE)', value: fmtRange(r.se, r.openEnded) });
         out.lines.push('Self-employment tax still applies. A Social Security agreement with your country may remove it.');
         out.links.push('seTax');
       }
@@ -358,7 +363,7 @@
     }
     out.links = [...new Set(out.links)].map(k => LINKS[k]);
     out.estimateLabel = 'Estimate only, based on ' + (answers.year || 'current') + ' IRS figures and your answers. It isn’t tax advice.';
-    out.filingReminder = 'U.S. citizens and green card holders file a U.S. return every year, even when they owe $0.';
+    out.filingReminder = 'U.S. citizens and green card holders file a U.S. return each year their income is over the filing threshold, even when they owe $0.';
     return out;
   }
 

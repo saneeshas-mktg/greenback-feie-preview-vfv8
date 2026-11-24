@@ -4,7 +4,7 @@ const out = [];
 const linkMd = k => `[${L.LINKS[k].label}](${L.LINKS[k].url})`;
 const ROUTES = {
   status: 'U.S. citizen or green card holder → Q2. Neither → **Result A** (reason: status).',
-  year: '2025 or 2026 → Q3, and the estimate uses that year\'s IRS figures. Earlier year → **Result B** (reason: late).',
+  year: '2026 → Q3, and the estimate uses the 2026 IRS figures. Earlier year → **Result B** (reason: late).',
   where: 'One country, moved this year, or a few countries → Q4 (movers also get the move-month and U.S.-pay follow-ups after Q7). No home base → **Result B** (reason: nomad). Still in the U.S. → **Result A** (reason: us).',
   days: '330 or more → Q5. Any other answer → follow-up "Have you lived in one country for a full calendar year?"',
   fullYear: 'Yes → Q5. No → **Result A** (reason: days).',
@@ -14,7 +14,8 @@ const ROUTES = {
   moveMonth: 'Movers only. → U.S. pay before the move.',
   usPay: 'Movers only. → Q8.',
   income: 'Movers → move month follow-up. Everyone else → Q8.',
-  otherIncome: 'None → Q9. Anything else → **Result B** (reason: other).',
+  otherIncome: 'None → Q9. Anything else → follow-up "About How Much of That Income Do You Get in a Year?"',
+  otherAmount: 'Under $5,000 → Q9, and the amount is included and taxed in full. $5,000 or more, or not sure → **Result B** (reason: other).',
   children: '1 or more → **Result E** (reason: children), no Q10. None → automatic check: at or below the no-tax line → **Result C**; above it → Q10.',
   foreignTax: 'None or under 10% → **Result D**. Anything else → **Result E** (reason: foreignTax).',
 };

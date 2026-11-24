@@ -31,7 +31,6 @@ const S = [
   { name: 'Parent with 2 children goes to E without Q10', a: { ...base, children: '2' }, result: 'E', reason: 'children' },
   { name: 'Self-employed in Thailand, $75k to $100k, 2026: $0 income tax but SE tax shown', a: { ...base, payer: 'self', income: 'b3' }, result: 'C' },
   { name: 'Moved abroad in July 2026, $50k U.S. pay before the move, $75k to $100k abroad', a: { ...base, where: 'moved', moveMonth: '7', usPay: 'u2', income: 'b3', foreignTax: 'under10' }, result: 'D' },
-  { name: '2025 tax year, single, $150k to $175k, uses $130,000 limit', a: { ...base, year: '2025', income: 'b6', foreignTax: 'under10' }, result: 'D' },
   { name: 'Over $300,000 shows an open-ended figure', a: { ...base, income: 'b10', foreignTax: 'notSure' }, result: 'E' },
 ];
 
@@ -54,6 +53,12 @@ for (const s of S) {
 const t = L.estimate({ year: '2026', filing: 'single', foreignIncome: 175000, usIncome: 0, children: 0, selfEmployed: false, foreignTaxRate: 0.25 });
 assert.strictEqual(Math.round(t.feieTax), 6240); assert.strictEqual(t.ftcTax, 0);
 console.log('PASS exact | single $175,000 2026: $6,240 with the FEIE alone, $0 once Spanish tax is credited');
+// Child tax credit phase-out counts excluded foreign pay: single parent, 2 children, $300,000 has no credit left; $150,000 keeps all of it.
+assert.strictEqual(L.estimate({ year: '2026', filing: 'hoh', foreignIncome: 300000, children: 2 }).ctcUsed, 0);
+const kept = L.estimate({ year: '2026', filing: 'hoh', foreignIncome: 175000, children: 2 });
+assert.strictEqual(kept.ctcUsed, Math.min(kept.feieTax, 4400));
+assert.strictEqual(L.estimate({ year: '2026', filing: 'single', foreignIncome: 210000, children: 1 }).ctcUsed, Math.min(L.estimate({ year: '2026', filing: 'single', foreignIncome: 210000, children: 0 }).feieTax, 1700));
+console.log('PASS child tax credit phase-out ($50 per $1,000 over $200,000 / $400,000, excluded pay counted)');
 // No-tax lines
 const lines = [['2026', 'single', 'no', 149000], ['2026', 'hoh', 'no', 157050], ['2026', 'mfj', 'no', 165100], ['2026', 'mfj', 'yes', 298000], ['2025', 'single', 'no', 145750], ['2025', 'hoh', 'no', 153625], ['2025', 'mfj', 'no', 161500], ['2025', 'mfj', 'yes', 291500]];
 for (const [year, filing, spouseAbroad, want] of lines) assert.strictEqual(L.noTaxLine({ year, filing, spouseAbroad }), want);
