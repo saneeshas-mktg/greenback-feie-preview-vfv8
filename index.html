@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>FEIE Calculator | Greenback Expat Tax Services (prototype)</title>
+<meta name="description" content="Estimate your U.S. income tax with the Foreign Earned Income Exclusion for 2025 and 2026, and see whether the FEIE or the Foreign Tax Credit fits you better.">
+<meta name="robots" content="noindex">
+<link rel="stylesheet" href="src/styles.css">
+</head>
+<body>
+<div class="proto-bar">Prototype for development: layout, logic and copy for <code>/tools/feie-calculator/</code>. Not the live page.</div>
+<main class="page">
+  <nav class="crumbs"><a href="https://www.greenbacktaxservices.com/">Home</a> › Tools › FEIE Calculator</nav>
+
+  <!-- H1 names the tool so Google can tell the page is an FEIE calculator. -->
+  <h1>FEIE Calculator: Estimate Your U.S. Tax Abroad</h1>
+
+  <!-- Quick answer: plain text on the page, readable by Google and AI Overviews. -->
+  <section class="quick-answer">
+    <p>The <a href="https://www.irs.gov/individuals/international-taxpayers/foreign-earned-income-exclusion" target="_blank" rel="noopener">Foreign Earned Income Exclusion (FEIE)</a> lets qualifying U.S. citizens and green card holders living abroad exclude up to <strong>$130,000</strong> of foreign earned income for 2025 and <strong>$132,900</strong> for 2026. Answer up to 10 questions to see whether the FEIE applies to you, an estimate of any U.S. income tax you'd still owe, and whether the Foreign Tax Credit may suit you better.</p>
+  </section>
+
+  <!-- The calculator mounts here. Embedded on the page, not a pop-up. -->
+  <section id="feie-calculator" class="calculator" aria-live="polite"></section>
+
+  <section class="method">
+    <h2>How this estimate works</h2>
+    <p>The calculator uses the IRS figures for the tax year you choose. The FEIE takes your foreign pay out of U.S. tax up to the yearly limit. Any pay above the limit is taxed at the rate it would face if nothing were excluded, which is the IRS stacking rule.</p>
+    <table>
+      <thead><tr><th>IRS figure</th><th>2025</th><th>2026</th></tr></thead>
+      <tbody>
+        <tr><td>FEIE limit per person</td><td>$130,000</td><td>$132,900</td></tr>
+        <tr><td>Standard deduction, single or married filing separately</td><td>$15,750</td><td>$16,100</td></tr>
+        <tr><td>Standard deduction, head of household</td><td>$23,625</td><td>$24,150</td></tr>
+        <tr><td>Standard deduction, married filing jointly</td><td>$31,500</td><td>$32,200</td></tr>
+        <tr><td>No U.S. income tax below, single</td><td>$145,750</td><td>$149,000</td></tr>
+        <tr><td>No U.S. income tax below, married, both working abroad</td><td>$291,500</td><td>$298,000</td></tr>
+      </tbody>
+    </table>
+    <p class="small">Sources: <a href="https://www.irs.gov/individuals/international-taxpayers/figuring-the-foreign-earned-income-exclusion" target="_blank" rel="noopener">IRS, Figuring the FEIE</a>; <a href="https://www.irs.gov/newsroom/working-families-tax-cuts-individuals-and-workers" target="_blank" rel="noopener">IRS, standard deduction</a>.</p>
+  </section>
+
+  <p class="disclaimer">This calculator gives an estimate only, based on your answers and published IRS figures. It isn't tax advice. Your actual U.S. tax depends on your full situation, and a Greenback accountant with expertise in expat returns can confirm it.</p>
+</main>
+
+<!-- Get Started: in the live build this is Greenback's existing pop-up form. -->
+<dialog id="get-started" aria-labelledby="gs-title">
+  <h2 id="gs-title">Get Started</h2>
+  <p>Greenback's existing Get Started pop-up form opens here. No form is wired into this prototype.</p>
+  <button type="button" id="get-started-close" class="btn-primary">Close</button>
+</dialog>
+
+<script src="src/figures.js"></script>
+<script src="src/logic.js"></script>
+<script src="src/app.js"></script>
+</body>
+</html>
