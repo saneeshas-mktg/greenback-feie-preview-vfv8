@@ -11,22 +11,27 @@
 
 ## Start here
 
-**Nahuel** — open the live prototype and click through a few paths first, then read §1 (Must-haves) and
-§2 (How the flow works). §3 has every question, helper text and link; §4 is the math; §6 is the test
-scenarios to build against. `node tests/scenarios.test.js` runs those — all 22 must pass.
+This repo is the whole brief. It has a **working prototype** (`index.html` + `src/`) and **this README**,
+which spells out everything the calculator has to do, as text you can copy. The questions, branching,
+math and result copy are final. Nothing else is needed to build it.
+
+**Nahuel** — open the live prototype and click through a few paths, then read §1 (Must-haves) and §2
+(How the flow works). §3 has every question, its helper text and its link; §4 is the math; §6 is the
+test scenarios to build against.
+
+**You choose the build route.** Gravity Forms (which can handle conditional logic), a custom block, or
+reusing this JavaScript are all fine, as long as the requirements in §1 are met. If something here is
+hard to build the way it's written, tell us and we'll adjust.
+
+**Styling:** follow the new service pages and Ariele's Support Call and Consultations designs. The
+calculator sits in the hero where the form card sits on those pages. Swap the prototype CSS for the
+site's own classes (`btn-primary`, `btn-orange`, the services-hub hero, the FAQ accordion). There is no
+stats strip on this page. Every heading, question, answer, label and button is in Title Case; keep it
+that way.
 
 **Hasalyn** — open the live prototype and review the copy: §3 (questions and helper text) and §5 (result
 copy for all five outcomes). Please also check the 2026 IRS figures in §4 against the IRS source before
 this goes live — they cite Rev. Proc. 2025-32 but haven't been independently verified.
-
----
-
-This repo has two things:
-
-1. **A working prototype** (`index.html` + `src/`). Open `index.html` in a browser and click through every path. The questions, branching, math and result copy are final. The styling follows the new service pages and Ariele's Support Call and Consultations designs: the calculator sits in the hero where the form card sits on those pages. Swap the prototype CSS for the site's own classes (`btn-primary`, `btn-orange`, the services-hub hero, the FAQ accordion). There is no stats strip on this page. Every heading, question, answer, label and button is in Title Case; keep it that way.
-2. **This README**: everything the calculator has to do, written as text you can copy.
-
-**You choose the build route.** Gravity Forms (which can handle conditional logic), a custom block, or reusing this JavaScript are all fine, as long as the requirements below are met. If something here is hard to build the way it's written, tell us and we'll adjust.
 
 ---
 
@@ -45,8 +50,9 @@ This repo has two things:
 | 9 | **Answers are not stored or sent anywhere.** The calculator runs in the browser. Only the optional email ask submits anything. | Income answers are personal. |
 | 10 | Works on mobile, keyboard-accessible, and the result is announced to screen readers (`aria-live`). | |
 | 11 | **Remove `noindex` and the yellow prototype bar from the live page.** Both are on the GitHub prototype on purpose, so the prototype never competes with the live page in search. | |
-| 12 | **SEO metadata (no year in either):** title `FEIE Calculator: Estimate Your U.S. Expat Tax | Greenback` (57 characters); meta description `Free Foreign Earned Income Exclusion calculator for U.S. expats. Estimate your U.S. tax with the FEIE and see if the Foreign Tax Credit fits better.` (148 characters). Mark up the three FAQs as `FAQPage` schema and the tool as `WebApplication` schema. | The page targets the calculator searches (FEIE calculator, foreign earned income exclusion calculator, U.S. expat tax calculator). How the FEIE works and who qualifies stay with the FEIE guide, which the page links to, so the two pages don't compete. |
+| 12 | **SEO metadata (no year in either):** title `FEIE Calculator: Estimate Your U.S. Expat Tax \| Greenback` (57 characters); meta description `Free Foreign Earned Income Exclusion calculator for U.S. expats. Estimate your U.S. tax with the FEIE and see if the Foreign Tax Credit fits better.` (148 characters). Mark up the three FAQs as `FAQPage` schema and the tool as `WebApplication` schema. | The page targets the calculator searches (FEIE calculator, foreign earned income exclusion calculator, U.S. expat tax calculator). How the FEIE works and who qualifies stay with the FEIE guide, which the page links to, so the two pages don't compete. |
 | 13 | **The tool offers the 2026 tax year only** (plus "An Earlier Year I Haven’t Filed", which goes to result B). `src/figures.js` keeps the 2025 figures for reference and testing. | Tax season opening in January 2027 is for 2026 returns. |
+| 14 | **Links in the page copy point at Greenback pages only.** No IRS links anywhere a reader can see, including the sources line under the figures table. The IRS URLs in `src/figures.js` and in §7 are code comments recording where each figure came from, so they can be re-checked each November; they are not page copy and should stay. The FEIE guide is linked twice on purpose — the head-term anchor in the intro, and the citation under the figures table. Keep both. | A reader at the figures table shouldn’t have to scroll back to the hero for the source. |
 
 **Tracking (to confirm with marketing):** one GA4 event when a result shows (result letter A to E as a parameter), plus clicks on Get Started, the two booking buttons and the email ask.
 
@@ -71,15 +77,6 @@ The **automatic check** after Q9 is not a question; the reader never sees it. It
 ## 3. Questions, helper text, links and routing
 
 Copy exactly. Curly apostrophes are intentional.
-
-**Links point at Greenback pages only.** No IRS links anywhere in the page copy, including the
-sources line under the figures table. The IRS URLs in `src/figures.js` and in section 8 below are
-code comments recording where each figure came from, so they can be re-checked each November; they
-are not page copy and should stay.
-
-**The FEIE guide is deliberately linked twice** (the head-term anchor in the intro, and the citation
-under the figures table). That is a decision, not an oversight: a reader at the table shouldn't have
-to scroll back to the hero for the source. Keep both.
 
 ### Q1: What Is Your U.S. Tax Status?
 
@@ -312,6 +309,13 @@ Foreign tax rate bands from Q10: under 10% = 0 to 10%, 10% to 20% = 10 to 20%, o
 
 Movers' line uses their reduced limit.
 
+**Show U.S. tax owed, never a saving.** Results never show what the FEIE "saves" against claiming
+nothing at all. Anyone paying foreign income tax would credit it anyway, so that comparison overstates
+the FEIE. Our test reader is the example: a "saving" framing shows $24,494 ($30,734 without the FEIE
+against $6,240 with it), while the reader's actual U.S. tax once Spanish tax is credited is $0 either
+way. Two of the eight competitor calculators we tested get this wrong. Show the tax, and on result E
+show it both with the FEIE alone and after the credit.
+
 **Check figure:** single, $175,000, 2026, 330 days, living in Spain → $6,240 with the FEIE alone, $0 once Spanish tax is credited. (Taxable $26,000; tax on $158,900 = $30,734, minus tax on $132,900 = $24,494.)
 
 ---
@@ -367,7 +371,7 @@ Figure 1: "Estimated U.S. Income Tax With the FEIE Alone for [YEAR]: $[LOW] to $
 - **Reached from Q10:** Figure 2: "Once Foreign Tax Is Credited on the Rest: $[LOW] to $[HIGH]". Text: "You pay enough foreign tax that the Foreign Tax Credit may cut your U.S. tax further, either on its own or alongside the FEIE." If Q10 was "Not sure": "If you pay 10% or more in foreign income tax, the Foreign Tax Credit may cut your U.S. tax further, either on its own or alongside the FEIE."
 - **Reached from Q9 (children), no second figure:**
   - If the FEIE estimate is above $0: "This already takes off up to $[CTC] of child tax credit. With the FEIE you can’t get the refundable part of that credit, so the Foreign Tax Credit often works out better for parents."
-  - If the FEIE estimate is $0: "You’d owe $0 with the FEIE, but you’d give up the refundable part of the child tax credit (up to $[1,700 × children]). With the Foreign Tax Credit instead, many parents can claim it as a refund."
+  - If the FEIE estimate is $0: "The FEIE would bring your U.S. income tax to zero, but you’d give up the refundable part of the child tax credit (up to $[1,700 × children]). With the Foreign Tax Credit instead, many parents can claim it as a refund."
   - Extra link: [Child Tax Credit for Expats](https://www.greenbacktaxservices.com/knowledge-center/child-tax-credit-for-expats/)
 
 Link on every E: [FEIE vs. FTC](https://www.greenbacktaxservices.com/knowledge-center/feie-vs-ftc/)
@@ -383,6 +387,8 @@ Next step: "Get Started, so a Greenback accountant compares the FEIE with the FT
 ## 6. Test scenarios
 
 Run `node tests/scenarios.test.js` to check the prototype logic. Use the same answers on the live build; each must land on the same result and figures.
+
+The runner prints **25 PASS lines** and ends with `22/22 scenarios passed`. That is rows 1 to 22 below, plus three checks that are not reader scenarios: the check figure in row 23, the child tax credit phase-out, and the no-tax lines. All 25 must pass.
 
 `base` = U.S. citizen, 2026, one country abroad, 330+ days, foreign employer, single, $175k to $200k, no other income, no children.
 
