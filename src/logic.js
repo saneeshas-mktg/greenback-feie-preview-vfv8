@@ -333,7 +333,7 @@
         if (outcome.reason === 'children') {
           const kids = Number(answers.children);
           out.lines.push(r.feie[1] === 0
-            ? 'You’d owe $0 with the FEIE, but you’d give up the refundable part of the child tax credit (up to ' + fmt(ACTC_PER_CHILD * kids) + '). With the Foreign Tax Credit instead, many parents can claim it as a refund.'
+            ? 'The FEIE would bring your U.S. income tax to zero, but you’d give up the refundable part of the child tax credit (up to ' + fmt(ACTC_PER_CHILD * kids) + '). With the Foreign Tax Credit instead, many parents can claim it as a refund.'
             : 'This already takes off up to ' + fmt(r.ctc) + ' of child tax credit. With the FEIE you can’t get the refundable part of that credit, so the Foreign Tax Credit often works out better for parents.');
           out.links.push('ctc');
         } else {
@@ -363,7 +363,7 @@
     }
     out.links = [...new Set(out.links)].map(k => LINKS[k]);
     out.estimateLabel = 'Estimate only, based on ' + (answers.year || 'current') + ' IRS figures and your answers. It isn’t tax advice.';
-    out.filingReminder = 'U.S. citizens and green card holders file a U.S. return each year their income is over the filing threshold, even when they owe $0.';
+    out.filingReminder = 'U.S. citizens and green card holders file a U.S. return each year their income is over the filing threshold, even when no tax is due.';
     return out;
   }
 

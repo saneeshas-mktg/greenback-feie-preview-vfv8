@@ -318,8 +318,8 @@ Optional email ask (C, D, E), label "Optional":
 > Want the expanded FEIE spreadsheet to work through your numbers in more detail? We’ll email it to you. [Email Me the Spreadsheet]
 
 Small print:
-- C, D, E: "Estimate only, based on [YEAR] IRS figures and your answers. It isn’t tax advice. U.S. citizens and green card holders file a U.S. return each year their income is over the filing threshold, even when they owe $0."
-- A, B: "This isn’t tax advice. U.S. citizens and green card holders file a U.S. return each year their income is over the filing threshold, even when they owe $0."
+- C, D, E: "Estimate only, based on [YEAR] IRS figures and your answers. It isn’t tax advice. U.S. citizens and green card holders file a U.S. return each year their income is over the filing threshold, even when no tax is due."
+- A, B: "This isn’t tax advice. U.S. citizens and green card holders file a U.S. return each year their income is over the filing threshold, even when no tax is due."
 
 ### Result A: May Not Apply Yet
 
